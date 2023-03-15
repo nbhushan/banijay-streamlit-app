@@ -19,15 +19,16 @@ def to_datetime(df, cols, format):
 '''
 # Banijay: Content and Ratings Analysis :tv:
 
-This is an app that is dynamically updated. 
-Sit back and enjoy the show.
+This is an app that is dynamically updated when new data is available.
 '''
 
 
 #read in the dataframe
 df_merged = pd.read_csv("/workspaces/banijay-streamlit-app/banijay/data/banijay_merged.csv", infer_datetime_format=True)
 
-st.write("Monthly trends")
+'''
+## Monthly Trend Analysis
+'''
 
 #visualize monthly trends
 monthly_trend = (df_merged
@@ -42,15 +43,15 @@ monthly_trend = (df_merged
 st.area_chart(monthly_trend)
 
 #target group analysis
-(df_merged
+df_target = (df_merged
     .loc[df_merged['ratings type'] == 'totaal', :]
     .groupby(['target group'])['kdh000']
     .mean()
     .sort_values(ascending=False)
-    .plot(kind='bar', 
-          figsize=(10,5), 
-          title='Mean kdh000 per target group based on ratings type totaal',
-          grid=True,
-          color='orange',
-          legend=True)
 )
+
+'''
+## Target Group Analysis
+'''
+
+st.bar_chart(df_target)
