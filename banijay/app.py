@@ -1,6 +1,8 @@
 import pandas as pd
 import streamlit as st
 import matplotlib.pyplot as plt
+import os
+
 
 #helper function (TODO: Refactor)
 def to_datetime(df, cols, format):
@@ -17,7 +19,7 @@ def to_datetime(df, cols, format):
     return df
 
 #read in the dataframe
-df_merged = pd.read_csv("/workspaces/banijay-streamlit-app/banijay/data/banijay_merged.csv", infer_datetime_format=True)
+df_merged = pd.read_csv("./data/banijay_merged.csv", infer_datetime_format=True)
 
 #visualize monthly trends
 monthly_trend = (df_merged
