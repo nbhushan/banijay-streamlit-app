@@ -16,13 +16,6 @@ def to_datetime(df, cols, format):
     df[cols] = df[cols].apply(to_datetime)
     return df
 
-'''
-# Banijay: Content and Ratings Analysis :tv:
-
-This is an app that is dynamically updated when new data is available.
-'''
-
-
 #read in the dataframe
 df_merged = pd.read_csv("/workspaces/banijay-streamlit-app/banijay/data/banijay_merged.csv", infer_datetime_format=True)
 
@@ -43,6 +36,12 @@ df_target = (df_merged
     .mean()
     .sort_values(ascending=False)
 )
+
+'''
+# Banijay: Content and Ratings Analysis :tv:
+
+This is an app that is dynamically updated when new data is available.
+'''
 
 '''
 ## Monthly Trend Analysis
