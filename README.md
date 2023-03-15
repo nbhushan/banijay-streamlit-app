@@ -1,2 +1,2 @@
 # banijay-streamlit-app
-streamline playground for block D
+streamlit playground for block D
