@@ -79,7 +79,7 @@ temporal_level = st.radio(
         horizontal=True,
     )
 
-if temporal_level == "Daily":
+if temporal_level == "Day of the week":
     st.line_chart(day_of_week_trend)
 elif temporal_level == "Monthly":
     st.line_chart(monthly_trend)
