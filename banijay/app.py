@@ -85,7 +85,7 @@ col2.metric("Zadl%", "{:2.2f}".format(zadl), "{:2.2f}".format(zadl_delta))
 '''
 ## Show Analysis
 '''
-st.bar_chart(df_filter, x='id', y='kdh000', labels=False)
+st.bar_chart(df_filter, x='id', y='kdh000')
 
 
 f'''
