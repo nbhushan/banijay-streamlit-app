@@ -79,7 +79,7 @@ temp = aggregate_data(df=df_filter, agg = "day_of_week", tg=tg)
 
 kdh, kdh_delta, zadl, zadl_delta = get_metrics(df_filter)
 
-col1, col2, col3 = st.columns([2,2,1)
+col1, col2, col3 = st.columns([2,2,1])
 col1.metric("Kdh000", "{:2.2f}".format(kdh), "{:2.2f}".format(kdh_delta))
 col2.metric("Zadl%", "{:2.2f}".format(zadl), "{:2.2f}".format(zadl_delta))
 with col3:
