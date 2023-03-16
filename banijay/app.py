@@ -90,7 +90,7 @@ col1, col2 = st.columns(2)
 with col1:
     st.bar_chart(df_filter_id, y=['kdh000','zadl%'])
 with col2:
-    st.dataframe(df_filter)
+    st.dataframe(df_filter_id)
 
 
 f'''
