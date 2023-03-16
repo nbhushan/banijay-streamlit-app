@@ -82,7 +82,7 @@ col1, col2, col3 = st.columns(3)
 col1.metric("Kdh000", "{:2.2f}".format(kdh), "{:2.2f}".format(kdh_delta))
 col2.metric("Zadl%", "{:2.2f}".format(zadl), "{:2.2f}".format(zadl_delta))
 with col3:
-    st.line_chart(df_filter.groupby('date_time').mean(), y=['kdh000','zadl%'])
+    st.bar_chart(df_filter.groupby('date_time').mean(), y=['kdh000','zadl%'])
 
 '''
 ## Show Analysis
