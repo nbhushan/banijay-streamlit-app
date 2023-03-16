@@ -44,7 +44,7 @@ def aggregate_data(df, agg, tg):
         day_of_week = lambda x: x['date_time'].dt.dayofweek)
     .loc[df_merged['ratings type'] == 'totaal', :]
     .loc[df_merged['target group'] ==  tg, :]
-    .groupby([agg])['kdh000']
+    .groupby([agg])['kdh000', 'zadl%']
     .mean()
     )
 
