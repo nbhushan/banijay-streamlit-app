@@ -70,7 +70,8 @@ target_groups = df_merged['target group'].unique().tolist()
 tg = st.selectbox("Please select a target group of interest", target_groups)
 
 f'''
-## Daily Ratings
+## Key KPIs
+### Weekly Report
 '''
 
 df_filter = filter_data(df=df_merged, tg=tg).set_index('date_time').last('7D')
