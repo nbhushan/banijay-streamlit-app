@@ -2,6 +2,7 @@ import pandas as pd
 import streamlit as st
 import matplotlib.pyplot as plt
 from pathlib import Path
+import time
 
 '''
 # Banijay: Content and Ratings Analysis :tv:
@@ -10,9 +11,29 @@ This is an app that is dynamically updated when new data is available.
 '''
 
 df_file_path = Path().absolute()/"data/banijay_merged.csv"
-print(df_file_path)
+
+#helper function to load data
+@st.cache_data
+def load_data(file_path):
+    df_merged = pd.read_csv(df_file_path, infer_datetime_format=True)
+    return df_merged
+
+@st.cache_data
+def aggregate_data(df, agg, tg):
+    return (df
+    .pipe(to_datetime, ['date_time'], '%Y-%m-%d %H:%M:%S')
+    .assign(
+        month = lambda x: x['date_time'].dt.month, 
+        year = lambda x: x['date_time'].dt.year, 
+        day_of_week = lambda x: x['date_time'].dt.dayofweek)
+    .loc[df_merged['ratings type'] == 'totaal', :]
+    .loc[df_merged['target group'] ==  tg, :]
+    .groupby([agg])['kdh000']
+    .mean()
+    )
 
 #helper function (TODO: Refactor)
+@st.cache_data
 def to_datetime(df, cols, format):
     '''
     Function to convert a column to datetime 
@@ -27,59 +48,15 @@ def to_datetime(df, cols, format):
     return df
 
 #read in the dataframe
-df_merged = pd.read_csv("/workspaces/banijay-streamlit-app/banijay/data/banijay_merged.csv", infer_datetime_format=True)
-print("succes")
+df_merged = load_data(file_path=df_file_path)
+    
 target_groups = df_merged['target group'].unique().tolist()
-print(target_groups)
-
-#tg = st.selectbox("Please select a target group of interest", target_groups)
-
-#visualize monthly trends
-monthly_trend = (df_merged
-    .pipe(to_datetime, ['date_time'], '%Y-%m-%d %H:%M:%S')
-    .assign(
-        month = lambda x: x['date_time'].dt.month)
-    .loc[df_merged['ratings type'] == 'totaal', :]
-    .loc[df_merged['target group'] ==  tg, :]
-    .groupby(['month'])['kdh000']
-    .mean()
-)
-
-#visualize day of the week trends
-day_of_week_trend = (df_merged
-    .pipe(to_datetime, ['date_time'], '%Y-%m-%d %H:%M:%S')
-    .assign(
-        day_of_week = lambda x: x['date_time'].dt.dayofweek)
-    .loc[df_merged['ratings type'] == 'totaal', :]
-    .loc[df_merged['target group'] ==  tg, :]
-    .groupby(['day_of_week'])['kdh000']
-    .mean()
-)
-
-#visualize yearly trends
-yearly_trend = (df_merged
-    .pipe(to_datetime, ['date_time'], '%Y-%m-%d %H:%M:%S')
-    .assign(
-        year = lambda x: x['date_time'].dt.year)
-    .loc[df_merged['ratings type'] == 'totaal', :]
-    .loc[df_merged['target group'] ==  tg, :]
-    .groupby(['year'])['kdh000']
-    .mean()
-)
-
+tg = st.selectbox("Please select a target group of interest", target_groups)
         
 
-#target group analysis
-df_target = (df_merged
-    .loc[df_merged['ratings type'] == 'totaal', :]
-    .groupby(['target group'])['kdh000']
-    .mean()
-    .sort_values(ascending=False)
-)
-
-
-'''
+f'''
 ## Trend Analysis
+Target Group: {tg}
 '''
 temporal_level = st.radio(
         "Choose temporal level👇",
@@ -89,12 +66,17 @@ temporal_level = st.radio(
         horizontal=True,
     )
 
-if temporal_level == "Day of the week":
-    st.area_chart(day_of_week_trend)
-elif temporal_level == "Monthly":
-    st.area_chart(monthly_trend)
-else:
-    st.area_chart(yearly_trend)
+with st.spinner('The requested visualization is being generated...'):
+    if temporal_level == "Day of the week":
+        day_of_week_trend = aggregate_data(df=df_merged, agg = "day_of_week", tg=tg)
+        st.area_chart(day_of_week_trend)
+    elif temporal_level == "Monthly":
+        monthly_trend = aggregate_data(df=df_merged, agg = "month", tg=tg)
+        st.area_chart(monthly_trend)
+    else:
+        yearly_trend = aggregate_data(df=df_merged, agg = "year", tg=tg)
+        st.area_chart(yearly_trend)
+
 
 
 # '''
