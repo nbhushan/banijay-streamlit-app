@@ -3,7 +3,14 @@ import streamlit as st
 import matplotlib.pyplot as plt
 from pathlib import Path
 
+'''
+# Banijay: Content and Ratings Analysis :tv:
+
+This is an app that is dynamically updated when new data is available.
+'''
+
 df_file_path = Path().absolute()/"data/banijay_merged.csv"
+print(df_file_path)
 
 #helper function (TODO: Refactor)
 def to_datetime(df, cols, format):
@@ -20,7 +27,12 @@ def to_datetime(df, cols, format):
     return df
 
 #read in the dataframe
-df_merged = pd.read_csv("./banijay/data/banijay_merged.csv", infer_datetime_format=True)
+df_merged = pd.read_csv("/workspaces/banijay-streamlit-app/banijay/data/banijay_merged.csv", infer_datetime_format=True)
+print("succes")
+target_groups = df_merged['target group'].unique().tolist()
+print(target_groups)
+
+#tg = st.selectbox("Please select a target group of interest", target_groups)
 
 #visualize monthly trends
 monthly_trend = (df_merged
@@ -28,6 +40,7 @@ monthly_trend = (df_merged
     .assign(
         month = lambda x: x['date_time'].dt.month)
     .loc[df_merged['ratings type'] == 'totaal', :]
+    .loc[df_merged['target group'] ==  tg, :]
     .groupby(['month'])['kdh000']
     .mean()
 )
@@ -38,6 +51,7 @@ day_of_week_trend = (df_merged
     .assign(
         day_of_week = lambda x: x['date_time'].dt.dayofweek)
     .loc[df_merged['ratings type'] == 'totaal', :]
+    .loc[df_merged['target group'] ==  tg, :]
     .groupby(['day_of_week'])['kdh000']
     .mean()
 )
@@ -48,6 +62,7 @@ yearly_trend = (df_merged
     .assign(
         year = lambda x: x['date_time'].dt.year)
     .loc[df_merged['ratings type'] == 'totaal', :]
+    .loc[df_merged['target group'] ==  tg, :]
     .groupby(['year'])['kdh000']
     .mean()
 )
@@ -62,11 +77,6 @@ df_target = (df_merged
     .sort_values(ascending=False)
 )
 
-'''
-# Banijay: Content and Ratings Analysis :tv:
-
-This is an app that is dynamically updated when new data is available.
-'''
 
 '''
 ## Trend Analysis
@@ -87,7 +97,7 @@ else:
     st.area_chart(yearly_trend)
 
 
-'''
-## Target Group Analysis
-'''
-st.bar_chart(df_target)
+# '''
+# ## Target Group Analysis
+# '''
+# st.bar_chart(df_target)
