@@ -79,7 +79,7 @@ kdh, kdh_delta, zadl, zadl_delta = get_metrics(df_filter)
 
 col1, col2, col3 = st.columns(3)
 col1.metric("Kdh000", "{:2.2f}".format(kdh), "{:2.2f}".format(kdh_delta))
-col1.metric("Zadl%", "{:2.2f}".format(zadl), "{:2.2f}".format(zadl_delta))
+col2.metric("Zadl%", "{:2.2f}".format(zadl), "{:2.2f}".format(zadl_delta))
 with col3:
     st.area_chart(df_filter, y = ['kdh000', 'zadl%'] )
 
