@@ -67,7 +67,7 @@ def to_datetime(df, cols, format):
 df_merged = load_data(file_path=df_file_path)
     
 target_groups = df_merged['target group'].unique().tolist()
-tg = st.selectbox("Please select a target group of interest", target_groups)
+tg = st.selectbox("Select a target group of interest", target_groups)
 
 f'''
 ## Key KPIs
@@ -81,6 +81,11 @@ kdh, kdh_delta, zadl, zadl_delta = get_metrics(df_filter)
 col1, col2 = st.columns(2)
 col1.metric("Kdh000", "{:2.2f}".format(kdh), "{:2.2f}".format(kdh_delta))
 col2.metric("Zadl%", "{:2.2f}".format(zadl), "{:2.2f}".format(zadl_delta))
+
+'''
+## Show Analysis
+'''
+st.bar_chart(df_filter, x='id', y='kdh000')
 
 
 f'''
