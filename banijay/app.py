@@ -10,7 +10,7 @@ import time
 This is an app that is dynamically updated when new data is available.
 '''
 
-df_file_path = Path().absolute()/"data/banijay_merged.csv"
+df_file_path = Path().absolute()/"banijay/data/banijay_merged.csv"
 
 #helper function to load data
 @st.cache_data
