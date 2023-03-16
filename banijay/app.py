@@ -80,11 +80,11 @@ temporal_level = st.radio(
     )
 
 if temporal_level == "Day of the week":
-    st.line_chart(day_of_week_trend)
+    st.area_chart(day_of_week_trend)
 elif temporal_level == "Monthly":
-    st.line_chart(monthly_trend)
+    st.area_chart(monthly_trend)
 else:
-    st.line_chart(yearly_trend)
+    st.area_chart(yearly_trend)
 
 
 '''
