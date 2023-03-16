@@ -74,8 +74,10 @@ f'''
 ### Weekly Report
 '''
 
-df_filter = filter_data(df=df_merged, tg=tg).set_index('date_time').last('7D')
+df_filter = filter_data(df=df_merged, tg=tg)
 temp = aggregate_data(df=df_filter, agg = "day_of_week", tg=tg)
+df_filter.set_index('date_time').last('7D')
+temp.set_index('date_time').last('7D')
 
 kdh, kdh_delta, zadl, zadl_delta = get_metrics(df_filter)
 
