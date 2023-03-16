@@ -15,6 +15,7 @@ ipykernel = "^6.21.3"
 deep-translator = "^1.10.1"
 num2words = "^0.5.12"
 tqdm = "^4.65.0"
+wordcloud = "^1.8.2.2"
 
 
 [build-system]

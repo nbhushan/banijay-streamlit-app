@@ -86,7 +86,10 @@ col2.metric("Zadl%", "{:2.2f}".format(zadl), "{:2.2f}".format(zadl_delta))
 ## Show Analysis
 '''
 df_filter_id = df_filter.groupby('id').mean()
-col1, col2 = st.columns([3,1])
+
+st.bar_chart(df_filter_id, y=['kdh000','zadl%'])
+
+col1, col2, col3 = st.columns(3)
 with col1:
     st.bar_chart(df_filter_id, y=['kdh000','zadl%'])
 with col2:
