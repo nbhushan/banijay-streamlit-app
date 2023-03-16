@@ -20,7 +20,7 @@ def to_datetime(df, cols, format):
     return df
 
 #read in the dataframe
-df_merged = pd.read_csv("/banijay/data/banijay_merged.csv", infer_datetime_format=True)
+df_merged = pd.read_csv("/app/banijay-streamlit-app/banijay/data/banijay_merged.csv", infer_datetime_format=True)
 
 #visualize monthly trends
 monthly_trend = (df_merged
