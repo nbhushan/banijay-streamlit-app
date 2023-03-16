@@ -49,7 +49,7 @@ This is an app that is dynamically updated when new data is available.
 '''
 ## Monthly Trend Analysis
 '''
-st.area_chart(monthly_trend)
+st.line_chart(monthly_trend)
 
 '''
 ## Target Group Analysis
