@@ -32,6 +32,28 @@ monthly_trend = (df_merged
     .mean()
 )
 
+#visualize day of the week trends
+day_of_week_trend = (df_merged
+    .pipe(to_datetime, ['date_time'], '%Y-%m-%d %H:%M:%S')
+    .assign(
+        day_of_week = lambda x: x['date_time'].dt.dayofweek)
+    .loc[df_merged['ratings type'] == 'totaal', :]
+    .groupby(['day_of_week'])['kdh000']
+    .mean()
+)
+
+#visualize yearly trends
+yearly_trend = (df_merged
+    .pipe(to_datetime, ['date_time'], '%Y-%m-%d %H:%M:%S')
+    .assign(
+        year = lambda x: x['date_time'].dt.year)
+    .loc[df_merged['ratings type'] == 'totaal', :]
+    .groupby(['year'])['kdh000']
+    .mean()
+)
+
+        
+
 #target group analysis
 df_target = (df_merged
     .loc[df_merged['ratings type'] == 'totaal', :]
@@ -47,9 +69,23 @@ This is an app that is dynamically updated when new data is available.
 '''
 
 '''
-## Monthly Trend Analysis
+## Trend Analysis
 '''
-st.line_chart(monthly_trend)
+temporal_level = st.radio(
+        "Choose temporal level👇",
+        ["Day of the week", "Monthly", "Yearly"],
+        key="visibility",
+        label_visibility="hidden",
+        horizontal=True,
+    )
+
+if temporal_level == "Daily":
+    st.line_chart(day_of_week_trend)
+elif temporal_level == "Monthly":
+    st.line_chart(monthly_trend)
+else:
+    st.line_chart(yearly_trend)
+
 
 '''
 ## Target Group Analysis
