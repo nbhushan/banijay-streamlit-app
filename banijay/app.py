@@ -7,7 +7,6 @@ import time
 '''
 # Banijay: Content and Ratings Analysis :tv:
 
-This is an app that is dynamically updated when new data is available.
 '''
 
 df_file_path = Path().absolute()/"banijay/data/banijay_merged.csv"
@@ -17,6 +16,23 @@ df_file_path = Path().absolute()/"banijay/data/banijay_merged.csv"
 def load_data(file_path):
     df_merged = pd.read_csv(df_file_path, infer_datetime_format=True)
     return df_merged
+
+@st.cache_data
+def filter_data(df, tg):
+     return (df
+    .pipe(to_datetime, ['date_time'], '%Y-%m-%d %H:%M:%S')
+    .query('`ratings type` == "totaal" &\
+            `target group` == @tg')
+    ) 
+
+@st.cache_data
+def get_metrics(df):
+    kdh = df['kdh000'].mean()
+    print(kdh)
+    kdh_delta = df['kdh000'].pct_change().mean()
+    zadl = df['zadl%'].mean()
+    zadl_delta = df['zadl%'].pct_change().mean()
+    return(kdh, kdh_delta, zadl, zadl_delta)
 
 @st.cache_data
 def aggregate_data(df, agg, tg):
@@ -52,7 +68,22 @@ df_merged = load_data(file_path=df_file_path)
     
 target_groups = df_merged['target group'].unique().tolist()
 tg = st.selectbox("Please select a target group of interest", target_groups)
-        
+
+f'''
+## Daily Ratings
+'''
+
+df_filter = filter_data(df=df_merged, tg=tg).set_index('date_time').last('7D')
+
+kdh, kdh_delta, zadl, zadl_delta = get_metrics(df_filter)
+
+col1, col2, col3 = st.columns(3)
+col1.metric("Kdh000", "{:2.2f}".format(kdh), "{:2.2f}".format(kdh_delta))
+col1.metric("Zadl%", "{:2.2f}".format(zadl), "{:2.2f}".format(zadl_delta))
+with col3:
+    st.area_chart(df_filter, y = ['kdh000', 'zadl%'] )
+
+
 
 f'''
 ## Trend Analysis
@@ -79,7 +110,4 @@ with st.spinner('The requested visualization is being generated...'):
 
 
 
-# '''
-# ## Target Group Analysis
-# '''
-# st.bar_chart(df_target)
+
