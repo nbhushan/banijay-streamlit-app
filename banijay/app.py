@@ -90,7 +90,8 @@ col1, col2 = st.columns([3,1])
 with col1:
     st.bar_chart(df_filter_id, y=['kdh000','zadl%'])
 with col2:
-    st.dataframe(df_filter_id)
+    st.write('Top 5 shows')
+    st.dataframe(df_filter_id.sort_values(ascending=False, by = 'kdh000'))
 
 
 f'''
