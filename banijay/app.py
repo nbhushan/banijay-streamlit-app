@@ -27,9 +27,9 @@ def filter_data(df, tg):
 
 @st.cache_data
 def get_metrics(df):
-    kdh = df['kdh000'].mean()
+    kdh = df['kdh%'].mean()
     print(kdh)
-    kdh_delta = df['kdh000'].pct_change().mean()
+    kdh_delta = df['kdh%'].pct_change().mean()
     zadl = df['zadl%'].mean()
     zadl_delta = df['zadl%'].pct_change().mean()
     return(kdh, kdh_delta, zadl, zadl_delta)
@@ -44,7 +44,7 @@ def aggregate_data(df, agg, tg):
         day_of_week = lambda x: x['date_time'].dt.dayofweek)
     .query('`ratings type` == "totaal" &\
             `target group` == @tg')
-    .groupby([agg])['kdh000', 'zadl%']
+    .groupby([agg])['kdh%', 'zadl%']
     .mean()
     )
 
@@ -79,8 +79,8 @@ df_filter = filter_data(df=df_merged, tg=tg).set_index('date_time').last('7D')
 kdh, kdh_delta, zadl, zadl_delta = get_metrics(df_filter)
 
 col1, col2 = st.columns(2)
-col1.metric("Kdh000", "{:2.2f}".format(kdh), "{:2.2f}".format(kdh_delta))
-col2.metric("Zadl%", "{:2.2f}".format(zadl), "{:2.2f}".format(zadl_delta))
+col1.metric("kdh%", "{:2.2f}".format(kdh), "{:2.2f}".format(kdh_delta))
+col2.metric("zadl%", "{:2.2f}".format(zadl), "{:2.2f}".format(zadl_delta))
 
 
 '''
@@ -90,10 +90,10 @@ df_filter_id = df_filter.groupby('id').mean()
 
 col1, col2 = st.columns([3,1])
 with col1:
-    st.bar_chart(df_filter_id, y=['kdh000','zadl%'])
+    st.bar_chart(df_filter_id, y=['kdh%','zadl%'])
 with col2:
     st.write('Top 5 shows')
-    st.dataframe(df_filter_id.iloc[:,1:].sort_values(ascending=False, by = 'kdh000').head(5))
+    st.dataframe(df_filter_id.iloc[:,1:].sort_values(ascending=False, by = 'kdh%').head(5))
 
 
 f'''
