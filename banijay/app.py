@@ -14,11 +14,13 @@ df_file_path = Path().absolute()/"banijay/data/banijay_merged.csv"
 #helper function to load data
 @st.cache_data
 def load_data(file_path):
+    """load content and ratings data"""
     df_merged = pd.read_csv(df_file_path, infer_datetime_format=True)
     return df_merged
 
 @st.cache_data
 def filter_data(df, tg):
+    """filter based on ratings type and target group"""
      return (df
     .pipe(to_datetime, ['date_time'], '%Y-%m-%d %H:%M:%S')
     .query('`ratings type` == "totaal" &\
@@ -27,6 +29,7 @@ def filter_data(df, tg):
 
 @st.cache_data
 def get_metrics(df):
+    """get KPIs"""
     kdh = df['kdh%'].mean()
     print(kdh)
     kdh_delta = df['kdh%'].pct_change().mean()
@@ -36,6 +39,7 @@ def get_metrics(df):
 
 @st.cache_data
 def aggregate_data(df, agg, tg):
+    """aggregated based on user provided field"""
     return (df
     .pipe(to_datetime, ['date_time'], '%Y-%m-%d %H:%M:%S')
     .assign(
