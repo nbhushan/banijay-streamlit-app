@@ -21,7 +21,7 @@ def load_data(file_path):
 @st.cache_data
 def filter_data(df, tg):
     """filter based on ratings type and target group"""
-     return (df
+    return (df
     .pipe(to_datetime, ['date_time'], '%Y-%m-%d %H:%M:%S')
     .query('`ratings type` == "totaal" &\
             `target group` == @tg')
