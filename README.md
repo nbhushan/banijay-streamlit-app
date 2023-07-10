@@ -1,4 +1,4 @@
-![dashboard image](./banijay_streamlit.png/)
+![dashboard image](./banijay_strealit.png/)
 
 
 
